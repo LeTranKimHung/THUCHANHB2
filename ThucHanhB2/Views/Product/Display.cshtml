@@ -1,0 +1,41 @@
+﻿@model ThucHanhB2.Models.Product
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">Chi tiết sản phẩm</h2>
+
+    <div class="row">
+        <div class="col-md-5">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="Ảnh sản phẩm chính" class="img-fluid rounded shadow-sm mb-3" style="max-height: 400px; object-fit: contain;" />
+            }
+            else
+            {
+                <div class="border p-5 text-center text-muted">
+                    <i class="fas fa-image fa-3x mb-3"></i>
+                    <p>Không có ảnh đại diện</p>
+                </div>
+            }
+
+            @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+            {
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var imageUrl in Model.ImageUrls)
+                    {
+                        <img src="@imageUrl" alt="Ảnh sản phẩm phụ" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;" />
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="col-md-7">
+            <h4><strong>Tên sản phẩm:</strong> @Model.Name</h4>
+            <h4><strong>Giá:</strong> @string.Format("{0:N0} VNĐ", Model.Price)</h4>
+            <h5><strong>Mô tả:</strong></h5>
+            <p class="border rounded p-3 bg-light" style="white-space: pre-wrap;">
+                @(!string.IsNullOrWhiteSpace(Model.Description) ? Model.Description : "Không có mô tả")
+            </p>
+        </div>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+</div>

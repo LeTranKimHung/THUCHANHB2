@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ThucHanhB2.Models.Product>
+
+<div class="d-flex justify-content-between align-items-center page-header">
+    <h2><i class="fas fa-box me-2 text-primary"></i>Danh sách sản phẩm</h2>
+    <a asp-action="Add" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Thêm sản phẩm mới
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>Chưa có sản phẩm nào. Hãy thêm sản phẩm mới!
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Ảnh</th>
+                        <th>Giá</th>
+                        <th>Mô tả</th>
+                        <th width="200">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td class="fw-medium">@product.Name</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                {
+                                    <img src="@product.ImageUrl" alt="Ảnh sản phẩm" style="width: 100px; height: auto;" />
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">Không có ảnh</span>
+                                }
+
+                                @* Nếu có nhiều ảnh phụ *@
+                                @if (product.ImageUrls != null && product.ImageUrls.Any())
+                                {
+                                    foreach (var img in product.ImageUrls)
+                                    {
+                                        <img src="@img" alt="Ảnh phụ" style="width: 100px; height: auto; margin-left: 5px;" />
+                                    }
+                                }
+                            </td>
+                            <td>@string.Format("{0:N0}", product.Price) VNĐ</td>
+                            <td>
+                                @if (string.IsNullOrEmpty(product.Description))
+                                {
+                                    <span class="text-muted fst-italic">Không có mô tả</span>
+                                }
+                                else
+                                {
+                                    @(product.Description.Length > 100 ? product.Description.Substring(0, 100) + "..." : product.Description)
+                                }
+                            </td>
+                            <td class="action-links">
+                                <a asp-action="Display" asp-route-id="@product.Id" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye me-1"></i>Xem
+                                </a>
+                                <a asp-action="Update" asp-route-id="@product.Id" class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-edit me-1"></i>Sửa
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-trash me-1"></i>Xóa
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Enable tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}
